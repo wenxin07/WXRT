@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{core-layout}">
+
+<body>
+
+	<div layout:fragment="content">
+
+		<h1 style="color: white; font-weight: bold;">由此出發，開始您的旅程</h1>
+		<h3 style="color: white; font-weight: bold;">輸入城市來找飯店</h3>
+
+		<div class="ui form">
+
+			<div class="field">
+				<div class="ui search" id="searchInputWrapper">
+					<div class="ui icon input">
+						<input class="prompt" type="text" id="searchInput"
+							placeholder="City"> <i class="search icon"></i>
+					</div>
+					<br> <br>
+					<br>
+					<div class="field flex-center-row">
+						<button class="ui button" type="button" id="searchGoButton">Go</button>
+					</div>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block layout:fragment="script">
+		<script>
+			$(document).ready(function() {
+				$("#searchGoButton").click(function() {
+					var inputString = $("#searchInput").val();
+					if (inputString) {
+						window.location = '/hotel/search?city=' + inputString;
+					} else {
+						window.location = '/hotel/search';
+					}
+				});
+			});
+
+			function locationQueryString(searchLocation) {
+				for ( var key in searchLocation) {
+					if (searchLocation.hasOwnProperty(key)
+							&& searchLocation[key] === '') {
+						delete searchLocation[key]
+					}
+				}
+				return $.param(searchLocation);
+			}
+
+			function pagingAndSortingQueryString() {
+				return "page=0&sort=stars,desc&sort=name"
+			}
+		</script>
+	</th:block>
+
+</body>
+</html>

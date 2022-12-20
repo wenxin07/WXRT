@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core-layout}">
+<body>
+
+<div layout:fragment="content">
+    <div th:replace="~{reservation/fragments :: reservationFlowSteps(${reservationFlow})}"></div>
+
+    <div class="ui top attached segment"
+         th:with="timeFormatShort=#{time.format.short},dateFormatLong=#{date.format.long}"
+         style="background-color: rgba(255,255,255,0.3);border-color: transparent;color:white;font-weight:bold;">
+        <div class="ui blue top attached label" style="border-color: transparent;color:white;font-weight:bold;">訂單明細</div>
+
+        <h3 style="border-color: transparent;color:white;font-weight:bold;">入住訊息</h3>
+        <br>
+        <a th:href="@{/hotel(id=${reservationFlow.reservation.room.hotel.id})}"
+           th:text="${reservationFlow.reservation.room.hotel.name}" style="border-color: transparent;color:white;font-weight:bold;font-size:x-large;"></a>
+<br>
+        <table class="ui very basic table">
+            <tbody>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">入住時間</td>
+                <td th:with="checkinDate=${#temporals.format(reservationFlow.reservation.dates.checkInDate, dateFormatLong)},
+                             checkinTime=${#temporals.format(reservationFlow.reservation.dates.estimatedCheckInTime, timeFormatShort)}"
+                    th:text="|${checkinDate} at ${checkinTime}|" style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">退房時間</td>
+                <td th:text="${#temporals.format(reservationFlow.reservation.dates.checkOutDate, dateFormatLong)}" style="border-color: transparent;color:white;font-weight:bold;">Check
+                    out
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="ui divider"></div>
+        <h3 style="border-color: transparent;color:white;font-weight:bold;">房源訊息</h3>
+        <table class="ui very basic table">
+            <tbody>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">房型</td>
+                <td th:text="${reservationFlow.reservation.room.roomType}" style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">房號</td>
+                <td th:text="${reservationFlow.reservation.room.roomNumber}" style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">每晚金額</td>
+                <td th:text="${'$'+#numbers.formatInteger(reservationFlow.reservation.room.costPerNight,0,'COMMA')}" style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">床數</td>
+                <td th:text="${reservationFlow.reservation.room.beds}" style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">日數</td>
+                <td th:text="${reservationFlow.reservation.dates.totalNights()}"style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">人數</td>
+                <td th:text="${reservationFlow.reservation.guests.size()}"style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th class="subtotal" style="border-color: transparent;color:white;font-weight:bold;">總計</th>
+                <th>
+                    <h5 class="subtotal"
+                        th:text="${'$'+#numbers.formatInteger(reservationFlow.reservation.getTotalRoomCost(),0,'COMMA')}"style="border-color: transparent;color:white;font-weight:bold;"></h5>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+
+
+<!--         <div th:unless="${reservationFlow.reservation.generalExtras.isEmpty()}"> -->
+<!--             <div class="ui divider"></div> -->
+<!--             <h3>General Extras</h3> -->
+<!--             <table class="ui very basic table"> -->
+<!--                 <tbody> -->
+<!--                 <tr th:each="extra : ${reservationFlow.reservation.generalExtras}"> -->
+<!--                     <td th:text="${extra.description}"></td> -->
+<!--                     <td th:with="totalNights=${reservationFlow.reservation.dates.totalNights()}" -->
+<!--                         th:text="${#numbers.formatCurrency(extra.getTotalPrice(totalNights))}"></td> -->
+<!--                 </tr> -->
+<!--                 </tbody> -->
+<!--                 <tfoot> -->
+<!--                 <tr> -->
+<!--                     <th class="subtotal">Sub total</th> -->
+<!--                     <th> -->
+<!--                         <h5 class="subtotal" -->
+<!--                             th:text="${#numbers.formatCurrency(reservationFlow.reservation.getTotalGeneralExtrasCost())}"></h5> -->
+<!--                     </th> -->
+<!--                 </tr> -->
+<!--                 </tfoot> -->
+<!--             </table> -->
+<!--         </div> -->
+
+<!--         <div th:unless="${reservationFlow.reservation.hasEmptyMealPlans()}"> -->
+<!--             <div class="ui divider"></div> -->
+<!--             <h3>Meal Plans</h3> -->
+<!--             <table class="ui very basic table"> -->
+<!--                 <thead> -->
+<!--                 <tr> -->
+<!--                     <th>Guest</th> -->
+<!--                     <th>Meals</th> -->
+<!--                     <th>Dietary Requirements</th> -->
+<!--                 </tr> -->
+<!--                 </thead> -->
+<!--                 <tbody> -->
+<!--                 <tr th:each="plan : ${reservationFlow.reservation.mealPlans}"> -->
+<!--                     <td th:text="${plan.guest.getFormattedFullName()}"></td> -->
+<!--                     <td th:text="${plan.toFoodExtraCsv()}"></td> -->
+<!--                     <td th:text="${plan.toDietRequirementsCsv()}"></td> -->
+<!--                 </tr> -->
+<!--                 </tbody> -->
+<!--                 <tfoot> -->
+<!--                 <tr> -->
+<!--                     <th class="subtotal">Sub total</th> -->
+<!--                     <th> -->
+<!--                         <h5 class="subtotal" -->
+<!--                             th:text="${#numbers.formatCurrency(reservationFlow.reservation.getTotalMealPlansCost())}"></h5> -->
+<!--                     </th> -->
+<!--                 </tr> -->
+<!--                 </tfoot> -->
+<!--             </table> -->
+<!--         </div> -->
+
+
+        <div class="ui divider"></div>
+        <h3 style="border-color: transparent;color:white;font-weight:bold;">總計金額</h3>
+        <table class="ui very basic table">
+            <tbody>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">延遲退房</td>
+                <td th:with="fee=${reservationFlow.reservation.getChargeableLateCheckoutFee()}"
+                    th:text="${fee.compareTo(T(java.math.BigDecimal).ZERO) == 0} ? 'Free' : ${#numbers.formatCurrency(fee)}" style="border-color: transparent;color:white;font-weight:bold;">
+                </td>
+            </tr>
+<!--             <tr th:unless="${reservationFlow.reservation.generalExtras.isEmpty()}"> -->
+<!--                 <td>General Extras</td> -->
+<!--                 <td th:text="${#numbers.formatCurrency(reservationFlow.reservation.getTotalGeneralExtrasCost())}"></td> -->
+<!--             </tr> -->
+<!--             <tr th:unless="${reservationFlow.reservation.hasEmptyMealPlans()}"> -->
+<!--                 <td>Meals</td> -->
+<!--                 <td th:text="${#numbers.formatCurrency(reservationFlow.reservation.getTotalMealPlansCost())}"></td> -->
+<!--             </tr> -->
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">住宿費用</td>
+                <td th:text="${'$'+#numbers.formatInteger(reservationFlow.reservation.getTotalCostExcludingTax(),0,'COMMA')}"style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td style="border-color: transparent;color:white;font-weight:bold;">服務費用</td>
+                <td th:text="${'$'+#numbers.formatInteger(reservationFlow.reservation.getTaxableAmount(),0,'COMMA')}"style="border-color: transparent;color:white;font-weight:bold;"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>
+                    <h3 style="border-color: transparent;color:white;font-weight:bold;">應付總額</h3>
+                </th>
+                <th>
+                    <h3 th:text="${'$'+#numbers.formatInteger(reservationFlow.reservation.getTotalCostIncludingTax(),0,'COMMA')}"style="border-color: transparent;color:white;font-weight:bold;"></h3>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="ui top attached segment margin-top-10" style="background-color: rgba(255,255,255,0.3);border-color: transparent;color:white;font-weight:bold;">
+                <form id="form" th:action="@{/reservation/review}" method="post">
+            <div>
+                <button class="ui button" type="submit" name="back">上一步</button>
+                <button class="ui button" type="submit">確認</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script>
+
+        $(document).ready(function () {
+            registerOnSubmitHandler("form");
+        });
+
+    </script>
+</th:block>
+
+</body>
+</html>

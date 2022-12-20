@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/reservation/reservation-layout}">
+<body>
+
+<div layout:fragment="main">
+    <div>
+        <form id="form" class="main__content-group" th:action="@{/reservation/guests}" method="post" th:object="${guest}">
+            <div class="ui form">
+                <div class="ui top attached segment">
+                    <div class="ui top attached label"
+                         th:text="${reservationFlow.getActiveStepDescription().getDescription()}">
+                    </div>
+
+                    <div class="two fields"
+                         th:with="hasError=${#fields.hasErrors('firstName')}" th:classappend="${hasError} ? 'error'">
+                        <div class="field">
+                            <input type="text" name="firstName" placeholder="輸入房客姓氏" th:field="*{firstName}">
+                            <div class="ui pointing red basic label" th:if="${hasError}" th:errors="*{firstName}"></div>
+                        </div>
+                        <div class="field"
+                             th:with="hasError=${#fields.hasErrors('lastName')}" th:classappend="${hasError} ? 'error'">
+                            <input type="text" name="lastName" placeholder="輸入房客姓名" th:field="*{lastName}">
+                            <div class="ui pointing red basic label" th:if="${hasError}" th:errors="*{lastName}"></div>
+                        </div>
+                    </div>
+
+                    <div class="field"
+                         th:with="hasError=${#fields.hasErrors('child')}" th:classappend="${hasError} ? 'error'">
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="child" id="childCheckbox" th:field="*{child}">
+                            <label for="childCheckbox">12歲或以下年齡兒童</label>
+                            <div class="ui pointing red basic label" th:if="${hasError}" th:errors="*{child}"></div>
+                        </div>
+                    </div>
+
+                    <div class="field"
+                         th:insert="~{reservation/fragments :: globalErrors(${#fields.globalErrors()})}"></div>
+
+                    <div class="field">
+                        <button class="ui button" type="submit" name="back">上一步</button>
+                        <button class="ui button" type="submit" name="addGuest">新增</button>
+                        <button class="ui button" type="submit">下一步</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <div class="main__content-group">
+            <div class="ui top attached segment">
+                <div class="ui top attached label"
+                     th:text="|房客 (${reservationFlow.reservation.guests.size()}/${reservationFlow.reservation.room.beds})|">
+                </div>
+
+                <p th:if="${reservationFlow.reservation.guests.isEmpty()}">
+                    尚未新增房客
+                </p>
+
+                <div class="ui info message" th:if="${reservationFlow.reservation.isRoomFull()}">
+                    人數已達規定上限
+                </div>
+
+                <table class="ui celled table" th:unless="${reservationFlow.reservation.guests.isEmpty()}">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>是否為兒童</th>
+                        <th>編輯</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="guest : ${reservationFlow.reservation.guests}">
+                        <td th:text="${guest.getFormattedFullName()}"></td>
+                        <td><i th:if="${guest.child}" class="icon-large green check icon"></i></td>
+                        <td>
+                            <form id="deleteGuestForm" th:action="@{/reservation/guests}" method="post">
+                                <button class="ui button" type="submit" name="removeGuest" th:value="${guest.tempId}">移除</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block layout:fragment="script">
+    <script>
+
+        $(document).ready(function () {
+            registerOnSubmitHandler("form");
+            registerOnSubmitHandler("deleteGuestForm");
+            enablePrimaryContact($("#primaryContactCheckbox").prop('checked'))
+        });
+
+        $("#primaryContactCheckbox").change(function () {
+            $("#childCheckbox").prop('disabled', this.checked);
+            enablePrimaryContact(this.checked);
+        });
+
+        $("#childCheckbox").change(function () {
+            $("#primaryContactCheckbox").prop('disabled', this.checked);
+        });
+
+        function enablePrimaryContact(enabled) {
+            var controls = $("#primaryContactControls");
+            controls.find("*").prop('disabled', !enabled);
+            if (enabled) {
+                controls.find("label").removeClass("dim");
+            } else {
+                controls.find("label").addClass("dim");
+            }
+        }
+    </script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+* {
+    font-family: 微軟正黑體;
+}
+
+.c1{
+    position: relative;
+    margin: auto;
+    margin-top: 200px;
+    width: 300px;
+    height: 130px;
+    background-color: white;
+    border-radius: 5px;
+    border-top: 10px solid #2f4f4f;
+    box-shadow: 0 0px 70px rgba(0, 0, 0, 0.2);
+
+}
+
+.c2{
+    font-size: 35px;
+    text-align: center;
+    margin-top: 35px;
+}
+
+.c3{
+    text-align: center;
+    color: gray;
+    margin-top: 150px;
+
+}
+
+
+.c5{
+    position: relative;
+    margin: auto;
+    margin-top: 40px;
+    text-align: center;
+}
+
+#since {
+    text-align: center;
+    color: #a3a2a3;
+    margin: 0px 0px 0px 0px;
+    font-size: 14px;
+  }

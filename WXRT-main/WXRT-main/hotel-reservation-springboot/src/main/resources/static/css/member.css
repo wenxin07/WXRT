@@ -1,0 +1,109 @@
+* {
+    font-family: 微軟正黑體;
+}
+
+body {
+    background-color: white;
+}
+
+.tb1 {
+    width: 900px;
+    border: 3px solid #708090;
+    border-collapse: collapse;
+    font-size: large;
+}
+
+table {
+    position: relative;
+    margin: auto;
+    top: 40px;
+}
+
+th {
+    width: 180px;
+    height: 60px;
+    border: 3px solid #708090;
+    background-color: #2f4f4f;
+    color: white;
+    text-align: center;
+
+}
+
+td {
+    height: 60px;
+    border: 3px solid #708090;
+}
+
+
+.c1 {
+    position: relative;
+    margin: auto;
+    top: 10px;
+    text-align: center;
+}
+
+.c2 {
+    width: 700px;
+    height: 50px;
+    font-size: medium;
+    margin-left: 15px;
+}
+
+.c3 {
+    width: 600px;
+    height: 35px;
+    margin-top: 5px;
+}
+
+.c31 {
+    width: 40px;
+}
+
+select {
+    width: 100px;
+    height: 30px;
+    margin-left: 25px;
+    margin-right: 5px;
+    text-align: center;
+    font-size: medium;
+    border: solid 1px #d2b48c;
+    border-radius: 5px;
+
+}
+
+#w-LNAME,
+#w-FNAME,
+#w-TEL,
+#w-PASSWORD {
+    width: 150px;
+    height: 20px;
+    margin: 10px;
+    margin-right: 40px;
+
+}
+
+#w-EMAIL {
+    width: 300px;
+    height: 20px;
+    margin: 10px;
+    margin-right: 40px;
+}
+
+input {
+    padding: 5px;
+    border: none;
+    border: solid 1px #d2b48c;
+    border-radius: 5px;
+}
+
+.c4 {
+    position: relative;
+    margin: auto;
+    margin-top: 60px;
+    width: 100px;
+    height: 40px;
+}
+
+.update {
+    font-size: larger;
+}
